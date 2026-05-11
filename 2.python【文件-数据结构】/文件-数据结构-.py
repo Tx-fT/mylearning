@@ -438,7 +438,13 @@
 # finally:#都会执行的代码(不论出错)
 #     print('ok')
 
-
+#参数传参：位置传参（顺序），关键字传参（之前有跳过）
+with open('test.txt','r',encoding='utf-8') as f:
+    content=f.read()#全部读取
+    print(content)
+    content_list=f.readlines()
+    for line in content_list:
+        print(line.strip())#去掉不需要的字符：换行符
 
 
 
