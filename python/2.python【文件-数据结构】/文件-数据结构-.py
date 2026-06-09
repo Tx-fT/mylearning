@@ -439,16 +439,27 @@
 #     print('ok')
 
 #参数传参：位置传参（顺序），关键字传参（之前有跳过）
-with open('test.txt','r',encoding='utf-8') as f:
-    content=f.read()#全部读取
-    print(content)
-    content_list=f.readlines()
-    for line in content_list:
-        print(line.strip())#去掉不需要的字符：换行符
-
-
-
-
+# with open('test.txt','r',encoding='utf-8') as f:
+#     content=f.read()#全部读取
+#     print(content)
+#     content_list=f.readlines()
+#     for line in content_list:
+#         print(line.strip())#去掉不需要的字符：换行符
+#readline：单读一行
+#readlines：形成列表
+# f.write("中国是一个伟大的国家!")
+#>>>ls = ["中国", "法国", "美国"]
+# >>>f.writelines(ls)
+# 改变当前文件操作指针的位置，offset含义如下：
+# 0 –文件开头；1 –当前位置；2 –文件结尾
+# >>>f.seek(0)  #回到文件开头
+from jieba import *
+f=open('test.txt','r',encoding='utf-8')
+text=f.read()
+f.close()
+c={}
+excludes={'我','的','了','是','在','和','不'}
+d=lcut
 
 
 

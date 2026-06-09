@@ -1,3 +1,4 @@
+cd ~/Desktop/mylearning && git add . && git commit -m "强制上传" && git push origin main --force
 很好的问题！如果你想在**已有仓库基础上添加新文件**，这是非常常见的操作。让我详细说明步骤：
 
 ## 在已有仓库中添加文件的流程
@@ -148,7 +149,25 @@ git commit -m "描述你的更改"
 git push origin main
 ```
 
-
+commm
 这样就能持续向已有的 GitHub 仓库添加新文件了！
 
 你现在可以先执行 `git pull origin main --allow-unrelated-histories` 来解决推送问题，然后告诉我结果如何？
+
+# 进入你的仓库
+cd ~/Desktop/mylearning
+
+# 查看当前有哪些文件
+ls
+
+# 删除指定文件（例如删除 test.txt）
+git rm test.txt
+
+# 或删除文件夹（例如删除 docs 文件夹）
+git rm -r docs/
+
+# 提交删除操作
+git commit -m "删除指定文件/文件夹"
+
+# 推送到GitHub
+git push origin main

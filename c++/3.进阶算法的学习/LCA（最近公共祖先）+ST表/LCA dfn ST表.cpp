@@ -79,7 +79,7 @@ int main(){
 		g[a].push_back(b);
 		g[b].push_back(a);	  	
 	}
-	dfs(r,0);
+	dfs(r,0);//一维序列就是dfn序
 //完善stg
 	merge_stg();
 	while(q--){

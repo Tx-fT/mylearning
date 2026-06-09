@@ -1648,53 +1648,653 @@
 //	}
 //	return 0;
 //}
-#include<iostream>
-using namespace std;
-const long long mod=1000000007;
-long long ans=0;
-void dfs(int l,int ml,int mr,int r){
-  if(l+1==ml&&mr+1==r){
-      ans=(ans+1)%mod;
-      return;
-  }
-  if(l+1<ml){
-    dfs(l+1,ml,mr,r);
-    dfs(l,ml-1,mr,r);
-  }
-  if(ml+1<mr){
-    dfs(l,ml,mr-1,r);
-    dfs(l,ml+1,mr,r);    
-  }
-  if(mr+1<r){
-    dfs(l,ml,mr+1,r);
-    dfs(l,ml,mr,r-1);    
-  }  
-}
-int main()
-{
-  for(int i=2;i<=2024;i++){
-    dfs(1,i,i,2025);
-  }
-  cout<<ans;
-  return 0;
-}
+//#include<iostream>
+//using namespace std;
+//const long long mod=1000000007;
+//long long ans=0;
+//void dfs(int l,int ml,int mr,int r){
+//  if(l+1==ml&&mr+1==r){
+//      ans=(ans+1)%mod;
+//      return;
+//  }
+//  if(l+1<ml){
+//    dfs(l+1,ml,mr,r);
+//    dfs(l,ml-1,mr,r);
+//  }
+//  if(ml+1<mr){
+//    dfs(l,ml,mr-1,r);
+//    dfs(l,ml+1,mr,r);    
+//  }
+//  if(mr+1<r){
+//    dfs(l,ml,mr+1,r);
+//    dfs(l,ml,mr,r-1);    
+//  }  
+//}
+//int main()
+//{
+//  for(int i=2;i<=2024;i++){
+//    dfs(1,i,i,2025);
+//  }
+//  cout<<ans;
+//  return 0;
+//}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//tuple
+//#include <iostream>
+//#include <cstring>
+//#include <set>
+//#include <algorithm>
+//#include <tuple>
+//using namespace std;
+//
+//bool used[8];
+//int cards[8] = {0,0,2,2,5,5,1,6};
+//set<tuple<int,int,int>> triangles;
+//
+//void dfs(int a, int b, int c, int idx) {
+//    if (a && b && c ) {
+//        if ( a+b>c && a+c>b && b+c>a) {
+//            int x = min({a,b,c});
+//            int z = max({a,b,c});
+//            int y = a+b+c - x - z;
+//            triangles.insert({x,y,z});
+//        }
+//        if(idx==8){
+//			return;
+//		}
+//    }
+//    for (int i = 0; i < 8; i++) {
+//        if (used[i]) continue;
+//        used[i] = true;
+//        dfs(a*10 + cards[i], b, c, idx+1);
+//        dfs(a, b*10 + cards[i], c, idx+1);
+//        dfs(a, b, c*10 + cards[i], idx+1);
+//        used[i] = false;
+//    }
+//}
+//int main() {
+//    sort(cards, cards+8);
+//    memset(used, 0, sizeof(used));
+//    dfs(0,0,0,0);
+//    cout << triangles.size() << endl;
+//    return 0;
+//}
+//#include <iostream>
+//#include <cstring>
+//#include <algorithm>
+//using namespace std;
+//int sum[1000010];
+//bool v[1000010];
+//int main()
+//{
+//  memset(sum,0,sizeof(sum));
+//  memset(v,false,sizeof(v));
+//  int n;
+//  cin>>n;
+//  int pre=-1;
+//  int mx=-1;
+//  int last;
+//  for(int i=1;i<=n;i++){
+//    int t;
+//    cin>>t;
+//    v[t]=true;
+//    mx=max(t,mx);
+//    if(i!=1&&pre!=t){
+//      sum[t]+=t;
+//    }
+//    pre=t;
+//    if(i==n){
+//      last=t;
+//    }
+//  }
+//  int ans=0x3f3f3f3f;
+//  for(int i=1;i<=mx;i++){
+//    if(i!=last&&v[i]){
+//      sum[i]+=i;
+//      ans=min(ans,sum[i]);
+//    }
+//  }
+//  ans=min(ans,sum[last]);
+//  cout<<ans;
+//  return 0;
+//}
+//#include <bits/stdc++.h>
+//using namespace std;
+//
+//const int MAXN = 5e5 + 10;
+//const int MOD = 6;  // 2和3的最小公倍数，核心优化点
+//
+//// 保留我原始的线段树节点结构，扩展为模6分组
+//struct SegNode {
+//    int l, r;
+//    int cnt[MOD];    // 每个模6分组的1的数量（替代原单一cnt）
+//    int len[MOD];    // 每个模6分组的元素个数（新增）
+//    int sta;         // 6位二进制懒标记：第i位=1表示模6=i的分组需要翻转（替代原多bool标记）
+//} tree[4 * MAXN];
+//
+//int coin[MAXN];  // 保留原始硬币数组（1-based）
+//int a[3];        // 临时存储步长对应的模6分组
+//
+//// 保留我原始的函数命名
+//inline int ls(int idx) { return idx << 1; }
+//inline int rs(int idx) { return idx << 1 | 1; }
+//
+//// 新增：计算1~x中模6=t的数的个数（公式化，替代遍历）
+//int get_mod_count(int x, int t) {
+//    if (t == 0) return x / MOD;
+//    return x / MOD + (x % MOD >= t ? 1 : 0);
+//}
+//
+//// 新增：计算[L,R]中模6=t的数的个数
+//int get_range_mod_count(int L, int R, int t) {
+//    return get_mod_count(R, t) - get_mod_count(L - 1, t);
+//}
+//
+//// 修正pushup：合并模6分组的cnt和len
+//void push_up(int idx) {
+//    for (int i = 0; i < MOD; ++i) {
+//        tree[idx].cnt[i] = tree[ls(idx)].cnt[i] + tree[rs(idx)].cnt[i];
+//        tree[idx].len[i] = tree[ls(idx)].len[i] + tree[rs(idx)].len[i];
+//    }
+//}
+//
+//// 修正build：初始化模6分组的cnt和len
+//void build(int idx, int l, int r) {
+//    tree[idx].l = l;
+//    tree[idx].r = r;
+//    tree[idx].sta = 0;
+//    memset(tree[idx].cnt, 0, sizeof(tree[idx].cnt));
+//    memset(tree[idx].len, 0, sizeof(tree[idx].len));
+//
+//    if (l == r) {
+//        // 保留原始的coin数组赋值逻辑
+//        int mod = l % MOD;
+//        tree[idx].cnt[mod] = coin[l];  // coin[l]是0/1，直接赋值
+//        tree[idx].len[mod] = 1;        // 单个节点，对应模分组长度为1
+//        return;
+//    }
+//
+//    int mid = (l + r) / 2;
+//    build(ls(idx), l, mid);
+//    build(rs(idx), mid + 1, r);
+//    push_up(idx);
+//}
+//
+//// 新增：添加翻转标记（整合操作1/2/3的翻转逻辑）
+//void add_tag(int idx, int op, int L) {
+//    int pl = tree[idx].l;
+//    int pr = tree[idx].r;
+//
+//    if (op == 3) {  // 操作3：全翻转，所有模6分组
+//        for (int i = 0; i < MOD; ++i) {
+//            if (get_range_mod_count(pl, pr, i) == 0) continue;
+//            tree[idx].sta ^= (1 << i);  // 位运算标记翻转
+//            tree[idx].cnt[i] = tree[idx].len[i] - tree[idx].cnt[i];
+//        }
+//    } else if (op == 1 || op == 2) {  // 操作1/2：步长翻转，对应模6分组
+//        bool is_valid[3] = {false, false, false};
+//        if (op == 1) {  // 步长2 → 模6分组：L%6, L%6+2, L%6+4
+//            a[0] = L % MOD;
+//            a[1] = (a[0] + 2) % MOD;
+//            a[2] = (a[1] + 2) % MOD;
+//            is_valid[0] = (get_range_mod_count(pl, pr, a[0]) != 0);
+//            is_valid[1] = (get_range_mod_count(pl, pr, a[1]) != 0);
+//            is_valid[2] = (get_range_mod_count(pl, pr, a[2]) != 0);
+//        } else {  // 步长3 → 模6分组：L%6, L%6+3
+//            a[0] = L % MOD;
+//            a[1] = (a[0] + 3) % MOD;
+//            is_valid[0] = (get_range_mod_count(pl, pr, a[0]) != 0);
+//            is_valid[1] = (get_range_mod_count(pl, pr, a[1]) != 0);
+//            is_valid[2] = false;
+//        }
+//
+//        // 翻转对应模6分组
+//        for (int i = 0; i < 3; ++i) {
+//            if (!is_valid[i]) continue;
+//            tree[idx].sta ^= (1 << a[i]);
+//            tree[idx].cnt[a[i]] = tree[idx].len[a[i]] - tree[idx].cnt[a[i]];
+//        }
+//    }
+//}
+//
+//// 修正push_down：位运算下传模6分组的翻转标记
+//void push_down(int idx) {
+//    if (tree[idx].sta == 0) return;
+//
+//    // 遍历6个模分组，批量下传翻转
+//    for (int i = 0; i < MOD; ++i) {
+//        if ((tree[idx].sta >> i) & 1) {
+//            tree[ls(idx)].cnt[i] = tree[ls(idx)].len[i] - tree[ls(idx)].cnt[i];
+//            tree[rs(idx)].cnt[i] = tree[rs(idx)].len[i] - tree[rs(idx)].cnt[i];
+//        }
+//    }
+//
+//    // 传递标记（异或）
+//    tree[ls(idx)].sta ^= tree[idx].sta;
+//    tree[rs(idx)].sta ^= tree[idx].sta;
+//    tree[idx].sta = 0;
+//}
+//
+//// 修正update：整合所有操作的更新逻辑，替换原单点更新
+//void update(int idx, int L, int R, int op, int x) {
+//    int l = tree[idx].l;
+//    int r = tree[idx].r;
+//
+//    if (L <= l && r <= R) {
+//        add_tag(idx, op, x);  // 区间全覆盖，添加标记
+//        return;
+//    }
+//
+//    push_down(idx);  // 下传标记
+//    int mid = (l + r) / 2;
+//    if (L <= mid) update(ls(idx), L, R, op, x);
+//    if (R > mid) update(rs(idx), L, R, op, x);
+//    push_up(idx);    // 合并更新结果
+//}
+//
+//// 修正query：累加模6分组的cnt，替换原单一cnt查询
+//int query(int idx, int L, int R) {
+//    int l = tree[idx].l;
+//    int r = tree[idx].r;
+//
+//    if (L <= l && r <= R) {
+//        int sum = 0;
+//        for (int i = 0; i < MOD; ++i) sum += tree[idx].cnt[i];
+//        return sum;
+//    }
+//
+//    push_down(idx);
+//    int res = 0;
+//    int mid = (l + r) / 2;
+//    if (L <= mid) res += query(ls(idx), L, R);
+//    if (R > mid) res += query(rs(idx), L, R);
+//    return res;
+//}
+//
+//// 保留我原始的main函数结构，仅修正调用逻辑
+//int main() {
+//    ios::sync_with_stdio(false);
+//    cin.tie(nullptr);
+//    cout.tie(nullptr);
+//
+//    int n, m;
+//    cin >> n >> m;
+//
+//    // 保留原始的coin数组输入逻辑
+//    for (int i = 1; i <= n; ++i) {
+//        cin >> coin[i];
+//    }
+//
+//    // 保留原始的线段树构建逻辑
+//    build(1, 1, n);
+//
+//    // 保留原始的操作处理逻辑
+//    while (m--) {
+//        int op, x, y;
+//        cin >> op >> x >> y;
+//
+//        if (op == 1 || op == 2 || op == 3) {
+//            update(1, x, y, op, x);  // 修正为区间更新，替代原单点更新
+//        } else if (op == 4) {
+//            cout << query(1, x, y) << '\n';  // 保留查询逻辑，替换endl为'\n'加速
+//        }
+//    }
+//
+//    return 0;
+//}
+//#include<iostream>
+//#include<cstring>
+//#include<algorithm>
+//using namespace std;
+//int a[8]={'s'-97,'h'-97,'a'-97,'n'-97,'g'-97,'i'-97};
+//int b[256];
+//int main(){
+//    memset(b,0,sizeof(b));
+//    int n;
+//    cin>>n;
+//    for(int i=1;i<=n;i++){
+//        char t;
+//        cin>>t;
+//        if(t>97){
+//            t=t-'a';
+//        }
+//        else{
+//            t=t-'A';
+//        }
+//        a[t]++;
+//    }
+//    int mi=0x3f3f3f3f;
+//    for(int i=0;i<=5;i++){
+//        if(i==1||i==2){
+//            b[a[i]]/=2;
+//        }
+//        mi=min(b[a[i]],mi);
+//    }
+//    cout<<mi;
+//    return 0;
+//}
+//#include<iostream>
+//#include<algorithm>
+//using namespace std;
+//int n,m;
+//int b[105][105];
+//void solve(int x,int y){
+//	int sum=0;
+//	int mx=max(max(x-1,n-x),max(y-1,m-y));
+//	for(int i=1;i<=mx;i++){
+//		
+//	}
+//}
+//int main(){
+//	cin>>n>>m;
+//	for(int i=1;i<=m+1;i++){
+//		for(int j=1;j<=n+1;j++){
+//			solve(i,j);
+//		}
+//	}
+//	for(int i=1;i<=m+1;i++){
+//		for(int j=1;j<=n+1;j++){
+//			
+//		}
+//	}
+//	return 0;
+//}
+//#include <bits/stdc++.h>
+//using namespace std;
+//using ll = long long;
+//#define int long long
+//#define pii pair<int,int>
+//
+//
+//const int N = 5e3+5;
+//const int mod = 998244353;
+//
+//int ans[105][105];
+//
+//void solve(){
+//    int n,m;
+//    cin>>n>>m;
+//    for(int i=0;i<=n/2;i++){
+//        for(int j=0;j<=m/2;j++){
+//            int x1=i,x2=n-i,y1=j,y2=m-j;
+//            for(int x=0;x<x1;x++){
+//                ans[i][j]+=max(min(y1,n-x)-max(0ll,x1-x),0ll);
+//                ans[i][j]+=max(min(y2,n-x)-max(0ll,x1-x),0ll);
+//            }
+//            for(int y=0;y<y1;y++){
+//                ans[i][j]+=max(min(x1,m-y)-max(0ll,y1-y),0ll);
+//                ans[i][j]+=max(min(x2,m-y)-max(0ll,y1-y),0ll);
+//            }
+//            ans[i][j]+=(min(x1,y2)+min(x2,y1)+min(y2,x2)+min(x1,y1));
+//        }
+//    }
+//
+//    for(int i=0;i<=n;i++){
+//        for(int j=0;j<=m;j++){
+//            if(i<=n/2){
+//                if(j<=m/2)cout<<ans[i][j]<<" ";
+//                else cout<<ans[i][m-j]<<" ";
+//            }
+//            else{
+//                if(j<=m/2)cout<<ans[n-i][j]<<" ";
+//                else cout<<ans[n-i][m-j]<<" ";
+//            }
+//        }
+//        cout<<"\n";
+//    }
+//}
+//
+//
+//signed main() {
+//    ios::sync_with_stdio(0);
+//    cin.tie(0);
+//    cout.tie(0);
+//   // int T;cin >> T;
+//   // while (T--) 
+//    solve();
+//    return 0;
+//}
+//#include <bits/stdc++.h>
+//using namespace std;
+//using ll = long long;
+//int c[500010];
+//bool v[500010];
+//void solve() {
+//    int n,m,k;
+//    cin >> n >> m >> k;
+//    vector<int>fa(n+1,0);
+//    fa[1] = -1;
+//    for(int i = 1;i <= n;i++){
+//        int num;
+//        cin >> num;
+//        int x;
+//        for(int j = 0;j < num;j++){
+//            cin >> x;
+//            fa[x] = i;
+//            c[i]++;
+//        }
+//    }
+//    unordered_map<int,int>p;
+//    int x,y;
+//    for(int i = 0;i < m;i++){
+//        cin >> x >> y;
+//        if(v[x]) continue;
+//        p[y] = x;
+//        v[x]=true;
+//    }
+//    vector<int>b(k+1,0);
+//    for(int i = 1;i <= k;i++){
+//        cin >> b[i];
+//    }
+//    int ans = INT_MAX;
+//    for(int i = 1;i <= k;i++){
+//        bool flag = true;
+//        int cnt = 0;
+//        for(int j = b[i];fa[j] != -1;){
+//        	if(c[fa[j]]==1){
+//        		j=fa[j];
+//			}
+//            else if(p.find(j) != p.end()){
+//                j = p[j];
+//                cnt++;
+//            }
+//            else{
+//                flag = false;
+//                break;
+//            }
+//        }
+//        if(flag){
+//            ans = min(ans,cnt);
+//        }
+//    }
+//    if(ans != INT_MAX)cout << ans << endl;
+//    else cout << -1 << endl;
+//}
+//
+//int main() {
+//    ios::sync_with_stdio(false);
+//    cin.tie(nullptr); 
+//    memset(c,0,sizeof(c));
+//    memset(v,false,sizeof(v));
+//    int t;
+//    cin >> t;
+//    while(t--)solve();
+//    return 0;
+//}
+//#include<bits/stdc++.h>
+//using namespace std;
+//vector<int> g[500010];
+//int fa[500010];
+//long long dp[500010];
+//bool v[500010];
+//int n,m,k;
+//int main(){
+//	int q;
+//	cin>>q;
+//	while(q--){
+//		cin>>n>>m>>k;
+//		for(int i=1;i<=n;i++){
+//			int num;
+//			cin>>num;
+//			for(int j=1;j<=num;j++){
+//				int to;
+//				cin>>to;
+//				g[i].push_back(to);
+//				fa[to]=i;
+//			}
+//		}
+//		unordered_map<int,int> p;
+//		for(int i=1;i<=m;i++){
+//			int a,b;
+//			cin>>a>>b;
+//			p[b]=a;
+//		}
+//		queue<int> tar;
+//		for(int i=1;i<=k;i++){
+//			int t;
+//			cin>>t;
+//			tar.push(t);
+//		}
+//		while(!tar.empty()){
+//			int idx=tar.front();
+//			tar.pop();
+//			int r=fa[idx];
+//			int sum=0;
+//			for(int i:g[r]){
+//				sum+=dp[i];
+//			}
+//			dp[r]=min(sum,)			
+//		}
+//	}
+//	return 0;
+//}
+//#include<bits/stdc++.h>
+//using namespace std;
+//int main(){
+//	int n;
+//	cin>>n;
+//	long long ans=0;
+//	int m=0;
+//	if(n%2==1){
+//		ans=(n/2+1)*(n/2)/2;
+//		m=n/2+1;
+//	}
+//	else{
+//		ans=(n/2)*(n/2-1)/2;
+//		m/=2;
+//	}
+//	cout<<ans<<endl;
+//	for(int i=1;i<=m;i++){
+//		for(int j=1;j<i;j++){
+//			cout<<i<<" "<<j<<endl;
+//		}
+//	}
+//	if(n%2==0){
+//		m++;
+//	}
+//	for(int i=m;i<=n;i++){
+//		for(int j=m;j<i;j++){
+//			cout<<i<<" "<<j<<endl;
+//		}
+//	}
+//	return 0;
+//}
+//#include<bits/stdc++.h>
+//using namespace std;
+//
+//int n;
+//struct node{
+//	int p,l,r;
+//};
+//vector<int> g[200010];
+//node buk[200010];
+//int tim=0;
+//int dfn[200010];
+//int low[200010];
+//stack<int> st;
+//bool v[200010];
+//int cnt=0;
+//int id[200010];
+//
+//void tarjan(int x){
+//	dfn[x]=low[x]=++tim;
+//	st.push(x);
+//	v[x]=true;
+//	
+//	for(auto i:g[x]){
+//		if(!dfn[i]){
+//			tarjan(i);
+//			low[x]=min(low[x],low[i]);
+//		}
+//		else if(v[i]){
+//			low[x]=min(low[x],dfn[i]);
+//		}
+//	}//总会有回路
+//	
+//	//实在所有子节点遍历完后再做的判断
+//	if(low[x]==dfn[x]){
+//		++cnt;
+//		int t;
+//		do{
+//			t=st.top();
+//			st.pop();
+//			id[t]=cnt;
+//			v[t]=false;			
+//		}while(t!=x);
+//	}	
+//}
+//
+//int main(){
+//	//build graph
+//	cin>>n;
+//	for(int i=1;i<=n;i++){
+//		int a,b,c;
+//		cin>>a>>b>>c;
+//		buk[i]={a,b,c};
+//	}
+//	sort(buk+1,buk+n+1,[&](node &a,node &b){
+//		return a.p<b.p;
+//	});
+//	for(int i=1;i<=n;i++){
+//		int l=buk[i].p-buk[i].l;
+//		int r=buk[i].p+buk[i].r;
+//		for(int j=i-1;j>=1&&buk[j].p>=l;j--){
+//			g[i].push_back(j);
+//		}
+//		for(int j=i+1;j<=n&&buk[j].p<=r;j++){
+//			g[i].push_back(j);
+//		}
+//	}
+//	
+//	//tarjan
+//	for(int i=1;i<=n;i++){
+//		if(!dfn[i]){
+//			tarjan(i);
+//		}
+//	}
+//	
+//	//judge in_deg(入度)
+//	int in_deg[cnt+5];
+//	fill(in_deg,in_deg+cnt+5,0);
+//	for(int i=1;i<=n;i++){
+//		for(int j:g[i]){
+//			if(id[j]!=id[i]){
+//				in_deg[id[j]]=1;
+//			}
+//		}
+//	}
+//	
+//	//count
+//	int ans=0;
+//	for(int i=1;i<=cnt;i++){
+//		if(!in_deg[i]){
+//			ans++;
+//		}
+//	}
+//	
+//	cout<<ans;
+//	return 0;
+//}
 
 
 
