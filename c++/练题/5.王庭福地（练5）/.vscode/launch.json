@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/Xf/Desktop/mylearning/c++/练题/5phase",
-      "program": "c:/Users/Xf/Desktop/mylearning/c++/练题/5phase/build/Debug/outDebug",
+      "cwd": "c:/Users/Xf/Desktop/mylearning/c++/练题/5.王庭福地（练5）",
+      "program": "c:/Users/Xf/Desktop/mylearning/c++/练题/5.王庭福地（练5）/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
