@@ -207,13 +207,6 @@
 #prompts
 #就是发送给模型的消息，其中SystemMessage是系统提示词（system prompt），可以给模型设定角色，聊天的背景，任务说明，对模型生成的内容有很大影响
 
-import os
-from dotenv import load_dotenv
-from langchain.agents import create_agent
-from langchain.tools import tool
-from langchain_core.messages import SystemMessage,HumanMessage,AIMessage
-from langchain.chat_models import init_chat_model
-load_dotenv()
 #如何设定系统提示词
 # agent=create_agent(
 #     model='deepseek-v4-pro',
@@ -241,6 +234,117 @@ load_dotenv()
 #     return number ** 0.5
 # 当参数比较复杂时
 # 定义pydantic model描述参数
+# class WeatherInput(BaseModel):
+#     """查询天气输入参数"""
+#     location:str=Field(description="city name or  coordinate")
+#     units:Literal["celsius","fahrenheit"]=Field(
+#         default="celsius",
+#         description="Temprature unit performance"
+#     )
+#     include_forcast:bool=Field(
+#         default=False,
+#         description="whether to include forcast"
+#     )
+# @tool(args_schema=WeatherInput)#参数约束，langchain就能提取信息作为参数的描述
+# def get_weather(location:str,units:str="celsius",include_forcast:bool=False)->str:
+#     """Get current weather and optional forcast"""
+#     temp=22 if units=="celsius" else 72
+#     result = f"Current weather in {location} : {temp} degrees {units[0].upper()}"
+#     if include_forcast:
+#         result += "\nForcast: Sunny"
+#     return result
+# agent=create_agent(
+#     model='deepseek-v4-pro',
+#     tools=[get_weather]
+# )
+# response=agent.invoke({
+#     "messages":[
+#         SystemMessage("请使用工具来获取天气"),
+#         HumanMessage("今天%s的天气如何" % "北京")
+#     ]
+# })
+# for message in response['messages']:
+#     message.pretty_print()
+#预定义工具
+#有些工具langchain已经定义好了，比如搜索、翻译、计算器等等
+#Tavily search API，给模型的搜索工具
+import os
+from dotenv import load_dotenv
+load_dotenv()
+from langchain.agents import create_agent
+from langchain.tools import tool
+from langchain_core.messages import SystemMessage,HumanMessage,AIMessage
+from langchain.chat_models import init_chat_model
+from pydantic import BaseModel,Field#model，描述
+from typing import Literal#枚举
+from langchain_tavily import TavilySearch
+from langgraph.checkpoint.memory import InMemorySaver
+
+search_tool=TavilySearch(#本质就一工具
+    api_key=os.getenv('TAVILY_API_KEY'),
+    max_results=5,
+    safe_search=True,
+    language="en"
+)
+#结构化输出的限制
+#agent回答内容引用的网页信息
+class reference(BaseModel):
+    title:str=Field(description="the title of the web page cited in the answer")
+    url:str=Field(description="the url of the web page cited in the answer")
+#agent的回答内容
+class answerinfo(BaseModel):
+    answer:str=Field(description="the answer to the user's question")
+    references:list[reference]=Field(description="the web pages cited in the answer")
+# message=search_tool.invoke("古月方源是谁")
+# print(message)
+#自己封装为tool
+@tool
+def web_search(query:str):
+    """search the web for information"""
+    return search_tool.invoke(query)
+agent =create_agent(
+    model='deepseek-v4-pro',
+    tools=[web_search],
+    checkpointer=InMemorySaver(),#记忆
+    system_prompt="你是一个智能助手，你使用工具来解决用户问题",
+    response_format=answerinfo#设置智能体格式
+)
+config ={"configurable":{"thread_id":"111"}}
+response=agent.invoke(
+    {"messages":[
+        HumanMessage("古月方源是谁")
+    ]},
+    config
+)
+for message in response['messages']:
+    message.pretty_print()
+#目前的搜索智能体存在两个问题：
+# 1.官方默认的tavily工具过于复杂
+# 2.结果不包含网页数据源，可信度低
+#解决思路：
+# 1.自定义tavily工具
+# 2.结构化输出
+
+#短期记忆
+#langchain中记忆工具，与对话大模型记忆不同，agent记忆分为两类：（记忆的作用域）
+#短期记忆：当前任务或会话的上下文
+#长期记忆：跨任务与会话的经验与知识
+#短期记忆：
+#在langchain短期记忆是通过Agentstate实现的，而会话历史（消息列表）是AgentState的一部分
+#langchain提供了checkpoiter对象来保存agentstate，每一次用户与AI交互都会生成一个快照，记录为一个checkpoiter
+#同一会话的多个checkpoint形成一个组，用同一个thread_id来表示（区分会话）
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

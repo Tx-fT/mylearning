@@ -1,4 +1,4 @@
-//ÍêÈ«±³°ü£ºÖØ¸´ÀûÓÃ
+//ï¿½ï¿½È«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½
 //#include<iostream>
 //#include<algorithm>
 //using namespace std;
@@ -286,7 +286,7 @@
 //    return 0;
 //}
 
-//Ïß¶ÎÊ÷
+//ï¿½ß¶ï¿½ï¿½ï¿½
 //#include<iostream>
 //using namespace std;
 //int n,m;
@@ -428,12 +428,12 @@
 //}
 //#include<iostream>
 //using namespace std;
-//typedef long long LL;  // ¶¨Òå LL Îª long long
+//typedef long long LL;  // ï¿½ï¿½ï¿½ï¿½ LL Îª long long
 //
 //int n,m;
-//LL a[4*100005];      // Ïß¶ÎÊ÷Êý×é
-//LL h[100005];        // Ô­Ê¼Êý×é
-//LL lzy[4*100005];    // ÀÁ±ê¼ÇÊý×é
+//LL a[4*100005];      // ï¿½ß¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//LL h[100005];        // Ô­Ê¼ï¿½ï¿½ï¿½ï¿½
+//LL lzy[4*100005];    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //
 //void pushup(int idx){
 //    a[idx]=a[2*idx]+a[2*idx+1];
@@ -461,7 +461,7 @@
 //    return r<l1||l>r1;
 //}
 //
-//void maketag(int idx,int len,LL x){  // x ¸ÄÎª LL ÀàÐÍ
+//void maketag(int idx,int len,LL x){  // x ï¿½ï¿½Îª LL ï¿½ï¿½ï¿½ï¿½
 //    lzy[idx]+=x;
 //    a[idx]+=len*x;
 //}
@@ -477,7 +477,7 @@
 //    }
 //}
 //
-//LL query2(int l1,int r1,int l,int r,int idx){  // ·µ»ØÀàÐÍ¸ÄÎª LL
+//LL query2(int l1,int r1,int l,int r,int idx){  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½Îª LL
 //    if(inrange(l1,r1,l,r)){
 //        return a[idx];
 //    }
@@ -489,7 +489,7 @@
 //    else return 0;
 //}
 //
-//void update1(int l1,int r1,int l,int r,LL x,int idx){  // x ¸ÄÎª LL ÀàÐÍ
+//void update1(int l1,int r1,int l,int r,LL x,int idx){  // x ï¿½ï¿½Îª LL ï¿½ï¿½ï¿½ï¿½
 //    if(inrange(l1,r1,l,r)){
 //        maketag(idx,r-l+1,x);
 //        return;
@@ -519,7 +519,7 @@
 //        cin>>ch;
 //        if(ch==1){
 //            int l1,r1;
-//            LL num;           // num ¸ÄÎª LL ÀàÐÍ
+//            LL num;           // num ï¿½ï¿½Îª LL ï¿½ï¿½ï¿½ï¿½
 //            cin>>l1>>r1>>num;
 //            update1(l1,r1,1,n,num,1);
 //        }
@@ -1095,8 +1095,8 @@
 //    char ch;
 //    for(int i = 1; i <= 30; i++) {
 //        for(int j = 1; j <= 60; j++) {
-//            cin >> ch;           // ¶ÁÈë×Ö·û
-//            a[i][j] = ch - '0';  // ½«×Ö·û '0'/'1' ×ª»»ÎªÊý×Ö 0/1
+//            cin >> ch;           // ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½
+//            a[i][j] = ch - '0';  // ï¿½ï¿½ï¿½Ö·ï¿½ '0'/'1' ×ªï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ 0/1
 //        }
 //    }
 //    
@@ -1115,7 +1115,7 @@
 //    cout << ans;
 //    return 0;
 //}
-//A*×ö·¨£¬´ÓÐ¡µ½´óÁÐÉî¶È
+//A*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //#include<iostream>
 //#include<string>
 //#include<map>
@@ -1193,7 +1193,7 @@
 //    }
 //    return 0;
 //}
-//KMPËã·¨*****
+//KMPï¿½ã·¨*****
 //#include<iostream>
 //using namespace std;
 //string s1,s2;
@@ -2142,7 +2142,7 @@
 //	
 //	return 0;
 //}
-//¸ß¾«¶È
+//ï¿½ß¾ï¿½ï¿½ï¿½
 //#include<iostream>
 //#include<algorithm>
 //#include<cstring>
@@ -2253,50 +2253,50 @@
 //	}
 //	return 0;
 //}
-//#include<iostream>
-//#include<algorithm>
-//
-//using namespace std;
-//int n,m;
-//int a[105][105];
-//int dist[105][105]={0};
-//int ste[4][2]={{1,0},{0,1},{-1,0},{0,-1}};
-//int ans=0;
-//int dfs(int x,int y){
-//	if (dist[x][y]) return dist[x][y];
-//	if(!dist[x][y]){
-//		dist[x][y]=1;
-//	}
-//	for(int i=0;i<4;i++){
-//		int tx=x+ste[i][0];
-//		int ty=y+ste[i][1];
-//		if(tx<1||ty<1||tx>n||ty>n){
-//			continue;
-//		}
-//		if(a[x][y]>a[tx][ty]){
-//			dist[x][y]=max(dist[x][y],dfs(tx,ty)+1);				
-//		}
-//	}
-//	ans=max(dist[x][y],ans);
-//	return dist[x][y];
-//}
-//int main(){
-//	cin>>n>>m;
-//	for(int i=1;i<=n;i++){
-//		for(int j=1;j<=m;j++){
-//			cin>>a[i][j];
-//		}
-//	}
-//	for(int i=1;i<=n;i++){
-//		for(int j=1;j<=m;j++){
-//			if(!dist[i][j]){
-//				dfs(i,j);
-//			}
-//		}
-//	}
-//	cout<<ans;			
-//	return 0;
-//}
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+int n,m;
+int a[105][105];
+int dist[105][105]={0};
+int ste[4][2]={{1,0},{0,1},{-1,0},{0,-1}};
+int ans=0;
+int dfs(int x,int y){
+	if (dist[x][y]) return dist[x][y];
+	if(!dist[x][y]){
+		dist[x][y]=1;
+	}
+	for(int i=0;i<4;i++){
+		int tx=x+ste[i][0];
+		int ty=y+ste[i][1];
+		if(tx<1||ty<1||tx>n||ty>n){
+			continue;
+		}
+		if(a[x][y]>a[tx][ty]){
+			dist[x][y]=max(dist[x][y],dfs(tx,ty)+1);				
+		}
+	}
+	ans=max(dist[x][y],ans);
+	return dist[x][y];
+}
+int main(){
+	cin>>n>>m;
+	for(int i=1;i<=n;i++){
+		for(int j=1;j<=m;j++){
+			cin>>a[i][j];
+		}
+	}
+	for(int i=1;i<=n;i++){
+		for(int j=1;j<=m;j++){
+			if(!dist[i][j]){
+				dfs(i,j);
+			}
+		}
+	}
+	cout<<ans;			
+	return 0;
+}
 
 
 

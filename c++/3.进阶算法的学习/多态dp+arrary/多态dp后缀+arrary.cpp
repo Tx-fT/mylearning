@@ -25,7 +25,7 @@ void solve() {
 
         for (int j = 1; j <= 26; j++) {
             if (!bad[now][j] && dp[i + 1][j] + 1 >= dp[i][now]) {
-                dp[i][now] = dp[i + 1][j] + 1;
+                dp[i][now] = dp[i + 1][j] + 1;A
                 la[i][now] = i;
             }
         }
