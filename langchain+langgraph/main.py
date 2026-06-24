@@ -268,56 +268,51 @@
 #预定义工具
 #有些工具langchain已经定义好了，比如搜索、翻译、计算器等等
 #Tavily search API，给模型的搜索工具
-import os
-from dotenv import load_dotenv
-load_dotenv()
-from langchain.agents import create_agent
-from langchain.tools import tool
-from langchain_core.messages import SystemMessage,HumanMessage,AIMessage
-from langchain.chat_models import init_chat_model
-from pydantic import BaseModel,Field#model，描述
-from typing import Literal#枚举
-from langchain_tavily import TavilySearch
-from langgraph.checkpoint.memory import InMemorySaver
 
-search_tool=TavilySearch(#本质就一工具
-    api_key=os.getenv('TAVILY_API_KEY'),
-    max_results=5,
-    safe_search=True,
-    language="en"
-)
+#连接sqlite                         #用目录
+#connection=sqlite3.connect("resources/checkpoint.db",check_same_thread=False)#false默认检查创建创建连接的线程与当前
+#初始化checkpointer（保存器）
+# checkpointer=SqliteSaver(connection)
+# checkpointer.setup()
+# search_tool=TavilySearch(#本质就一工具
+#     api_key=os.getenv('TAVILY_API_KEY'),
+#     max_results=5,
+#     safe_search=True,
+#     language="en"
+# )
 #结构化输出的限制
 #agent回答内容引用的网页信息
-class reference(BaseModel):
-    title:str=Field(description="the title of the web page cited in the answer")
-    url:str=Field(description="the url of the web page cited in the answer")
-#agent的回答内容
-class answerinfo(BaseModel):
-    answer:str=Field(description="the answer to the user's question")
-    references:list[reference]=Field(description="the web pages cited in the answer")
+# class reference(BaseModel):
+#     title:str=Field(description="the title of the web page cited in the answer")
+#     url:str=Field(description="the url of the web page cited in the answer")
+# #agent的回答内容
+# class answerinfo(BaseModel):
+#     answer:str=Field(description="the answer to the user's question")
+#     references:list[reference]=Field(description="the web pages cited in the answer")
 # message=search_tool.invoke("古月方源是谁")
 # print(message)
 #自己封装为tool
-@tool
-def web_search(query:str):
-    """search the web for information"""
-    return search_tool.invoke(query)
-agent =create_agent(
-    model='deepseek-v4-pro',
-    tools=[web_search],
-    checkpointer=InMemorySaver(),#记忆
-    system_prompt="你是一个智能助手，你使用工具来解决用户问题",
-    response_format=answerinfo#设置智能体格式
-)
-config ={"configurable":{"thread_id":"111"}}
-response=agent.invoke(
-    {"messages":[
-        HumanMessage("古月方源是谁")
-    ]},
-    config
-)
-for message in response['messages']:
-    message.pretty_print()
+# @tool
+# def web_search(query:str):
+#     """search the web for information"""
+#     return search_tool.invoke(query)
+# agent =create_agent(
+#     model='deepseek-v4-pro',
+#     # tools=[web_search],
+#     # checkpointer=InMemorySaver(),#记忆
+#     checkpointer=checkpointer,
+#     system_prompt="你是一个智能助手，你使用工具来解决用户问题",
+#     # response_format=answerinfo#设置智能体格式
+# )
+# config ={"configurable":{"thread_id":"111"}}
+# response=agent.invoke(
+#     {"messages":[
+#         HumanMessage("我叫什么？")
+#     ]},
+#     config
+# )
+# for message in response['messages']:
+#     message.pretty_print()
 #目前的搜索智能体存在两个问题：
 # 1.官方默认的tavily工具过于复杂
 # 2.结果不包含网页数据源，可信度低
@@ -333,6 +328,86 @@ for message in response['messages']:
 #在langchain短期记忆是通过Agentstate实现的，而会话历史（消息列表）是AgentState的一部分
 #langchain提供了checkpoiter对象来保存agentstate，每一次用户与AI交互都会生成一个快照，记录为一个checkpoiter
 #同一会话的多个checkpoint形成一个组，用同一个thread_id来表示（区分会话）
+#生产环境下会用数据库存储
+
+#记忆管理策略
+#模型的上下文溢出问题：
+#多轮对话会越积越多，langchain提供：
+#1.修剪：拿到消息历史，先移除前n条或后n条消息，再调用模型
+#2.删除：永久删除agentstate快照
+#3.总结摘要：现总结历史消息的早期消息，得到消息摘要。然后用消息摘要和最近的消息形成消息列表，再调用模型
+#  再来一个负责总结的模型
+#4.自定义
+
+#初始化checkpointer
+# checkpointer=InMemorySaver()#normal
+#初始化中间件
+# middleware=SummarizationMiddleware(
+#     model="deepseek-chat",
+#     trigger=("messages",3),#触发条件：当消息数量超过3时，进行总结
+#     keep=("messages",1)#保留会话数，超2条
+# )
+# #创建智能体
+# agent=create_agent(
+#     model="deepseek-v4-pro",
+#     middleware=[middleware],
+#     checkpointer=checkpointer,
+#     system_prompt="你是一个智能助手，请回答用户问题",
+# )
+# config:RunnableConfig={
+#     "configurable":{
+#         "thread_id":"111"
+#     }
+# }
+# agent.invoke(
+#     {"messages":[
+#         HumanMessage("我叫高松灯")
+#     ]},
+#     config
+# )
+# agent.invoke(
+#     {"messages":[
+#         HumanMessage("hello")
+#     ]},
+#     config
+# )
+# agent.invoke(
+#     {"messages":[
+#         HumanMessage("咕咕嘎嘎！")
+#     ]},
+#     config
+# )
+# response = agent.invoke(
+#     {"messages": [
+#         HumanMessage("我是谁呀")
+#     ]},
+#     config
+# )
+# for message in response['messages']:
+#     message.pretty_print()
+
+#langchain入门实战——AI私厨管家
+import os
+from dotenv import load_dotenv
+load_dotenv()
+from langchain.agents import create_agent
+from langchain.tools import tool
+from langchain_core.messages import SystemMessage,HumanMessage,AIMessage
+from langchain.chat_models import init_chat_model
+from pydantic import BaseModel,Field#model，描述
+from typing import Literal#枚举
+from langchain_tavily import TavilySearch
+from langgraph.checkpoint.memory import InMemorySaver
+import sqlite3
+from langgraph.checkpoint.sqlite import SqliteSaver#导入依赖
+from langchain.agents.middleware import SummarizationMiddleware
+from langchain_core.runnables import RunnableConfig#config的数据类型
+
+#需求分析
+#AI私厨管家是一个基于langchain和多模态的食谱多模态应用。用户可以拍摄自家冰箱或厨房的食物照片，管家会自动识别图片中的食材，根据食材搜索相关食谱推荐给用户
+
+
+
 
 
 

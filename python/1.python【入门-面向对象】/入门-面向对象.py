@@ -1,5 +1,4 @@
 # import random
-#
 # class card:
 #     def __init__(self,suite,face):
 #         self.suite=suite
@@ -76,20 +75,21 @@
 #列表(list)常用方法
 #长度：len(lst)
 #最值：max(lst)，min(lst)，sum(lst)
-#添加：append(元素)(加到末尾)，insert(位置,元素)(插入)，extend(列表)(扩展列表)
+#添加：append(元素)(加到末尾)，insert(位置,元素)(插入)（多加），extend(列表)(扩展列表)
 #删除：pop(位置)(删除并返回，默认末尾)，remove(元素)(删除第一个匹配)，clear()(清空)，del lst[位置]
 #排序：sort()(原地排序)，reverse()(反转)，sorted(列表)(返回新列表)
 #统计：count(元素)(出现次数)，index(元素)(首次出现位置)
-#拷贝：copy()(浅拷贝)
 
 #元组(tuple)常用方法
 #长度：len(tup)
 #统计：count(元素)(出现次数)，index(元素)(首次出现位置)
+#拷贝：copy()(浅拷贝)
 #注意：元组不可修改，无增删改方法
 # a=((1,2,3),(4,5,6))
 # print(a.index((4,5,6)))
 
 #字典(dict)常用方法
+#用{}
 #长度：len(dic)
 #获取：keys()(所有键)，values()(所有值)，items()(所有键值对)，get(键,默认值)(安全获取)
 #添加/更新：dic[键]=值，update(字典)(合并字典)
@@ -97,6 +97,7 @@
 #遍历：for k in dic，for v in dic.values()，for k,v in dic.items()
 
 #集合(set)常用方法
+#用{}
 #长度：len(st)
 #添加：add(元素)，update(集合)(添加多个)
 #删除：remove(元素)(不存在报错)，discard(元素)(不存在不报错)，pop()(随机删除)，clear()(清空)
@@ -148,7 +149,17 @@
 #finally对应语句块4一定执行
 #else对应语句块3在不发生异常时执行
 
+# 1. input() - 获取用户输入字符串
+# 例如用户输入: "10 20"
 
+# 2. input().split() - 按空格分割成列表
+# "10 20".split() -> ["10", "20"]
+
+# 3. map(int, ...) - 将列表中每个元素转换为int
+# map(int, ["10", "20"]) -> 返回迭代器 <map object>
+
+# 4. n, m = ... - 解包赋值给两个变量
+# n = 10, m = 20
 
 
 

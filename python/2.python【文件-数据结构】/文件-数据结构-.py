@@ -41,7 +41,7 @@
 # except UnicodeDecodeError:
 #     print('读取文件时解码错误!')
 # else:#而且else中的代码不会再进行异常捕获，也就是说如果遇到异常状况，程序会因异常而终止并报告异常信息。
-#     print('111')
+#     print('111')#没有任何异常时进行
 # finally:
 #     if file:
 #         file.close()
@@ -453,13 +453,6 @@
 # 改变当前文件操作指针的位置，offset含义如下：
 # 0 –文件开头；1 –当前位置；2 –文件结尾
 # >>>f.seek(0)  #回到文件开头
-from jieba import *
-f=open('test.txt','r',encoding='utf-8')
-text=f.read()
-f.close()
-c={}
-excludes={'我','的','了','是','在','和','不'}
-d=lcut
 
 
 

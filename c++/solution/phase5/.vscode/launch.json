@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/Xf/Desktop/mylearning/c++算法深基/动态规划整理",
-      "program": "c:/Users/Xf/Desktop/mylearning/c++算法深基/动态规划整理/build/Debug/outDebug",
+      "cwd": "c:/Users/Xf/Desktop/mylearning/c++/solution/phase5",
+      "program": "c:/Users/Xf/Desktop/mylearning/c++/solution/phase5/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

@@ -1,0 +1,222 @@
+================================================================================
+                    Kaggle 机器学习实战路线图
+================================================================================
+
+目标：以 Kaggle 比赛出分为导向，快速入门到拿牌。
+前提：已掌握基础算法和基本 Python 编程能力。
+
+================================================================================
+第一阶段 | 快速上手 Kaggle（第 1-2 周）
+================================================================================
+
+目标：熟悉平台流程，跑通提交，建立"可用 pipeline"的概念。
+
+【必做比赛】
+  - Titanic: 学会提交、看 leaderboard、读别人 notebook
+  - House Prices: 特征工程入门
+
+【核心 sklearn 工具箱】
+  模型（按使用频率排序）：
+    LightGBM / XGBoost / CatBoost     <- 表格数据统治级方案
+    RandomForest                       <- 基线模型
+    LogisticRegression / Ridge         <- 简单基线
+
+  预处理：
+    StandardScaler / LabelEncoder / OneHotEncoder
+    SimpleImputer / Pipeline / ColumnTransformer
+
+  特征工程：
+    PolynomialFeatures / KBinsDiscretizer
+    cross_val_score / GridSearchCV / RandomizedSearchCV
+
+  学习方式：不要自己实现算法，直接调库跑通 pipeline，理解每个步骤。
+
+================================================================================
+第二阶段 | 表格数据核心技术（第 3-6 周）
+================================================================================
+
+表格数据占 Kaggle 比赛的 60%+，是性价比最高的技能模块。
+
+【LightGBM / XGBoost / CatBoost 深入】
+
+  必须搞清楚的参数：
+    - num_leaves、max_depth、learning_rate 三者之间的关系
+    - min_child_samples / min_data_in_leaf 对过拟合的影响
+    - subsample、colsample_bytree、reg_alpha、reg_lambda 的作用
+    - scale_pos_weight / is_unbalance（处理不平衡数据）
+    - early_stopping_rounds 的正确用法
+
+【特征工程的 4 个核心思路】
+
+  1. Target Encoding（高基数类别特征）
+     -> category_encoders.TargetEncoder
+
+  2. 交叉特征（特征之间有交互）
+     -> df['A_mul_B'] = df['A'] * df['B']
+
+  3. 聚合统计（多表关联）
+     -> df.groupby('key').agg(['mean', 'std', 'count'])
+
+  4. 频次编码（类别多，担心目标泄漏）
+     -> df['freq'] = df['col'].map(df['col'].value_counts())
+
+【验证策略（Kaggle 最重要的工程素养）】
+
+  本地 CV 和 public LB 的相关性比模型分数本身更重要。
+
+  - 随机 K-Fold：      数据无时间结构时的默认选择
+  - Stratified K-Fold： 分类任务 + 样本不均衡
+  - Group K-Fold：      同一实体（用户/店铺）不能跨 fold
+  - Time Series Split： 有时间趋势的数据（金融、天气、销量预测）
+
+【本阶段练习赛】
+
+  Titanic              -> 入门，调通流程
+  House Prices         -> 特征工程
+  Spaceship Titanic    -> 分类 + 缺失值处理 + 特征构造
+  Tabular Playground   -> 每月都有，练手最佳
+
+================================================================================
+第三阶段 | 集成与调参（第 7-8 周）
+================================================================================
+
+【集成策略：Stacking】
+
+  层级 1（第一层）：多个强基模型并行
+    LGBM_1  +  XGB_1  +  CatBoost
+
+  层级 2（第二层）：简单模型做元学习器
+    LogisticRegression 或 Ridge
+
+  原理：多个异构模型投票，消除单模型偏差。
+
+【超参数调优的实际流程】
+
+  1. 先跑 baseline：用默认参数看分数
+  2. 粗调：learning_rate(0.05~0.1)、num_leaves(31~127)、max_depth(5~10)
+  3. Optuna 自动调参：300-500 次 trial，只关注最重要的 5-6 个参数
+  4. 最后微调：只调 learning_rate + num_iterations
+
+  Optuna 模板：
+  ----------------------------------------------------------
+  import optuna
+
+  def objective(trial):
+      params = {
+          'num_leaves': trial.suggest_int('num_leaves', 15, 255),
+          'max_depth': trial.suggest_int('max_depth', 3, 12),
+          'learning_rate': trial.suggest_float('learning_rate', 0.01, 0.3, log=True),
+          'subsample': trial.suggest_float('subsample', 0.6, 1.0),
+          'colsample_bytree': trial.suggest_float('colsample_bytree', 0.6, 1.0),
+          'reg_alpha': trial.suggest_float('reg_alpha', 1e-8, 10.0, log=True),
+          'reg_lambda': trial.suggest_float('reg_lambda', 1e-8, 10.0, log=True),
+          'min_child_samples': trial.suggest_int('min_child_samples', 5, 100),
+      }
+      # KFold + LightGBM -> return mean CV score
+  ----------------------------------------------------------
+
+【可冲刺比赛】
+
+  Otto Group Product Classification    -> 多分类经典
+  Porto Seguro Safe Driver Prediction  -> 不平衡二分类
+  任何当前的 Getting Started / Playground 比赛
+
+================================================================================
+第四阶段 | 深度学习打 Kaggle（第 9-12 周，选学）
+================================================================================
+
+表格数据的尽头是 GBDT，但以下比赛类型必须上深度学习：
+
+  图像分类  -> ResNet / EfficientNet / ViT
+  文本分类  -> BERT / DeBERTa / RoBERTa
+  图像分割  -> U-Net / DeepLabV3+
+  目标检测  -> YOLO / DETR
+
+重点不是从零实现，而是学会：
+  - 从 HuggingFace / timm 加载预训练模型
+  - 写一个干净的 PyTorch 训练循环（train/val loop + early stopping）
+  - 用 torch.cat() 把 GBDT 特征和 NN 特征拼在一起做 stacking
+
+================================================================================
+第五阶段 | 冲击奖牌 — 比赛实战方法论
+================================================================================
+
+【标准比赛流程（Day by Day）】
+
+  Day 1-2:   读懂数据、理解评估指标、建立 baseline、设定可信的 CV
+  Day 3-5:   特征工程迭代（最大区分度环节）
+  Day 6-8:   模型调参 + 多模型 stacking
+  Day 9-10:  后处理（阈值调优、伪标签、对抗验证）
+  Day 11+:   跟 public kernel 和 discussion，集成别人思路
+
+【区分奖牌层级的关键因素】
+
+  铜牌（top 30%）: GBDT + 合理 CV + 基础特征工程
+  银牌（top 10%）: 有创造力的特征工程 + 多模型 stacking + 后处理技巧
+  金牌（top 2%）:  伪标签 + 对抗验证 + 领域知识 + 好 ensemble + 跟 discussion
+
+【作弊码：读金牌选手的赛后总结（Solution Writeup）】
+
+  比赛结束后搜 "[比赛名] 1st place solution"，这是最高效的学习材料。
+  你会发现前几名的共性：
+    - 相似的特征构造思路
+    - 验证策略正确 > 模型复杂度
+    - ensemble 权重分配往往很简单（加权平均就够了）
+
+================================================================================
+推荐学习节奏总览
+================================================================================
+
+  第 1-2 周:   Titanic + House Prices，跑通完整 pipeline
+  第 3-4 周:   LightGBM/XGBoost 深入 + 3-5 个 Playground 比赛
+  第 5-6 周:   特征工程专项练习 + Optuna + 交叉验证策略
+  第 7-8 周:   Stacking + 打一场正在进行的表格赛（目标冲铜牌）
+  第 9-12 周:  深度学习模块（NLP 或 CV 选一个方向）
+  第 13 周+:   持续打比赛，读 solution，跟 discussion
+
+================================================================================
+五个核心经验法则
+================================================================================
+
+  1. 特征工程 >> 模型选择
+     同样的 GBDT，特征做好可以从 top 40% 跳到 top 10%。
+
+  2. 不要花时间从零实现算法
+     直接用 sklearn / lightgbm / pytorch，精力放在特征和验证上。
+
+  3. CV 比模型分数更重要
+     如果你的 CV 不准，你就是在优化噪声。花一整天把 CV 做对，
+     比花一整天调参更划算。
+
+  4. 要读别人的 notebook 和 discussion
+     Kaggle 是社区驱动的，顶尖选手会公开分享思路。
+
+  5. 先冲铜牌，不要一上来就想拿金牌
+     完成比完美重要。完整打一场比赛比看十门课收获大。
+
+================================================================================
+推荐资源清单
+================================================================================
+
+【教材】
+  - 吴恩达 Machine Learning Specialization (Coursera 2022 新版)
+  - 李沐《动手学深度学习》(d2l.ai)
+  - 周志华《机器学习》(西瓜书)—作为参考书查阅
+
+【工具库文档】
+  - LightGBM 官方文档
+  - XGBoost 官方文档
+  - CatBoost 官方文档
+  - scikit-learn 官方文档
+  - Optuna 官方文档
+
+【比赛平台】
+  - Kaggle Getting Started 系列比赛
+  - Kaggle Tabular Playground Series（每月更新）
+  - Kaggle Featured 比赛（正式赛，有奖金/奖牌）
+
+【深度学习框架】
+  - PyTorch + HuggingFace（transformers / datasets / tokenizers）
+  - timm（图像预训练模型库）
+
+================================================================================
