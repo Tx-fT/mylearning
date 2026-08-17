@@ -1,0 +1,7 @@
+{
+  "dependencies": ["./src"],
+  "graphs": {
+    "chief_agent": "./app/agents/project-aichief.py:agent"
+  },
+  "env": "./src/.env"
+}

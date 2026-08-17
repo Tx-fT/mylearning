@@ -387,21 +387,21 @@
 #     message.pretty_print()
 
 #langchain入门实战——AI私厨管家
-import os
-from dotenv import load_dotenv
-load_dotenv()
-from langchain.agents import create_agent
-from langchain.tools import tool
-from langchain_core.messages import SystemMessage,HumanMessage,AIMessage
-from langchain.chat_models import init_chat_model
-from pydantic import BaseModel,Field#model，描述
-from typing import Literal#枚举
-from langchain_tavily import TavilySearch
-from langgraph.checkpoint.memory import InMemorySaver
-import sqlite3
-from langgraph.checkpoint.sqlite import SqliteSaver#导入依赖
-from langchain.agents.middleware import SummarizationMiddleware
-from langchain_core.runnables import RunnableConfig#config的数据类型
+# import os
+# from dotenv import load_dotenv
+# load_dotenv()
+# from langchain.agents import create_agent
+# from langchain.tools import tool
+# from langchain_core.messages import SystemMessage,HumanMessage,AIMessage
+# from langchain.chat_models import init_chat_model
+# from pydantic import BaseModel,Field#model，描述
+# from typing import Literal#枚举
+# from langchain_tavily import TavilySearch
+# from langgraph.checkpoint.memory import InMemorySaver
+# import sqlite3
+# from langgraph.checkpoint.sqlite import SqliteSaver#导入依赖
+# from langchain.agents.middleware import SummarizationMiddleware
+# from langchain_core.runnables import RunnableConfig#config的数据类型
 
 #需求分析
 #AI私厨管家是一个基于langchain和多模态的食谱多模态应用。用户可以拍摄自家冰箱或厨房的食物照片，管家会自动识别图片中的食材，根据食材搜索相关食谱推荐给用户

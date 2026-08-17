@@ -36,3 +36,11 @@ ll C(int n, int k) {
     if (k < 0 || k > n) return 0;
     return fact[n] * invFact[k] % MOD * invFact[n - k] % MOD;
 }
+// 优化
+ll C(ll m,ll n){
+	if(n>m||n<0) return 0;
+	if(n>m-n) n=m-n;
+	ll res=1;
+	for(ll i=1;i<=n;i++) res=res*(m-i+1)/i;
+	return res;
+}
