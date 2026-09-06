@@ -1,0 +1,28 @@
+# 密钥，绝不打进镜像
+src/.env
+
+# Python 缓存
+__pycache__/
+*.pyc
+*.pyo
+
+# 本地虚拟环境
+.venv/
+venv/
+
+# 运行时数据（容器内会重建，不要把本地 checkpoint.db / uploads 打进镜像）
+resources/
+
+# 前端源码（后端镜像不需要）
+私厨-前端源码/
+node_modules/
+.next/
+
+# 文档与调试文件
+学习笔记.md
+README.md
+langgraph.json
+
+# Git
+.git/
+.gitignore

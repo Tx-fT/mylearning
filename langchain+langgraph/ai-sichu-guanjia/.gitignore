@@ -1,0 +1,24 @@
+# ===== 密钥（绝不提交）=====
+.env
+*.env
+!*.env.example
+
+# ===== 运行时数据（本地生成的，不进仓库）=====
+resources/
+*.db
+*.db-wal
+*.db-shm
+
+# ===== Python =====
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# ===== 前端构建产物 =====
+node_modules/
+.next/
+
+# Word 临时文件
+~$*

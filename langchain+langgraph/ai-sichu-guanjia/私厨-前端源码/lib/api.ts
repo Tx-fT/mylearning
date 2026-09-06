@@ -1,7 +1,7 @@
 /**
  * API 调用封装
  */
-const API_BASE = "http://localhost:8001";
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8001";
 
 /**
  * 获取 OSS 预签名上传 URL
