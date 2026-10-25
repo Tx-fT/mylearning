@@ -1,0 +1,13 @@
+[project]
+name = "kaggle"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "pandas>=3.0.5",
+    "pandas-stubs~=3.0.5",
+    "scikit-learn>=1.9.0",
+]
+
+[[tool.uv.index]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+default = true
